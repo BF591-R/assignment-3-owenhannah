@@ -194,6 +194,7 @@ In the end, the output is a tibble streamlined to only the genes of interest, wi
 goodGenes <- c("SLC1A4", "MGAT5B", "LINC02907", "BRIP1", "NRIP1", "TGDS", "PSMD10")
 badGenes <- c("MAF", "PLD4", "LIG3", "RARA", "NOTCH4", "USP8", "RARG")
 
+
 # Applying the function
 reduced_data <- reduce_data(result_tib, gene_names, goodGenes, badGenes)
 reduced_data
