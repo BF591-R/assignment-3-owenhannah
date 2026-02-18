@@ -1,6 +1,6 @@
 #!/usr/bin/Rscript
-## Author: Taylor Falk
-## tfalk@bu.edu
+## Author: Hannah Owen
+## hlowen@bu.edu
 ## BU BF591
 ## Assignment Bioinformatics Basics
 
@@ -35,7 +35,7 @@ suppressPackageStartupMessages(library(tidyverse))
 #' @examples 
 #' `data <- load_expression('/project/bf528/project_1/data/example_intensity_data.csv')`
 load_expression <- function(filepath) {
-    return(NULL)
+    return(as_tibble(read.csv(filepath)))
 }
 
 #' Filter 15% of the gene expression values.
@@ -51,7 +51,11 @@ load_expression <- function(filepath) {
 #' `tibble [40,158 × 1] (S3: tbl_df/tbl/data.frame)`
 #' `$ probe: chr [1:40158] "1007_s_at" "1053_at" "117_at" "121_at" ...`
 filter_15 <- function(tibble){
-    return(NULL)
+  filtered_tibble <- tibble %>% 
+    filter((rowSums(dplyr::select(., -probe) > log2(15))) / ncol(dplyr::select(., -probe)) >= .15) %>% 
+    dplyr::select(probe)
+  
+    return(filtered_tibble)
 }
 
 #### Gene name conversion ####
@@ -79,7 +83,19 @@ filter_15 <- function(tibble){
 #' `4        1553551_s_at      MT-ND2`
 #' `5           202860_at     DENND4B`
 affy_to_hgnc <- function(affy_vector) {
-    return(NULL)
+  affy_flat <- dplyr::pull(affy_vector)
+  
+  human_mart <- useEnsembl(biomart = "ensembl",
+                           dataset = "hsapiens_gene_ensembl",
+                           mirror = "asia")
+  
+  human_ensembl <- getBM(
+    attributes = c("affy_hg_u133_plus_2", "hgnc_symbol"),
+    filters = "affy_hg_u133_plus_2",
+    values = affy_flat,
+    mart = human_mart
+  )
+    return(as_tibble(human_ensembl))
 }
 
 #' Reduce a tibble of expression data to only the rows in good_genes or bad_genes.
@@ -126,6 +142,8 @@ reduce_data <- function(expr_tibble, names_ids, good_genes, bad_genes){
 #'
 #' @examples
 convert_to_long <- function(tibble) {
-    return(NULL)
+  long_tibble <- tibble %>% 
+    pivot_longer(cols = starts_with("GSM"), names_to = "sample", values_to = "value")
+    return(long_tibble)
 }
 
