@@ -234,5 +234,8 @@ this plot.
 ```{r boxplot from long format data using ggplot2, echo=FALSE}
 library(ggplot2)
 
+ggplot2(aes(x = , y= , fill = )) +
+  geom_boxplot()
+
 
 ```

@@ -87,7 +87,7 @@ affy_to_hgnc <- function(affy_vector) {
   
   human_mart <- useEnsembl(biomart = "ensembl",
                            dataset = "hsapiens_gene_ensembl",
-                           mirror = "asia")
+                           mirror = "useast")
   
   human_ensembl <- getBM(
     attributes = c("affy_hg_u133_plus_2", "hgnc_symbol"),
